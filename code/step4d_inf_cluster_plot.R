@@ -93,12 +93,14 @@ paneller=function(row = 1,column=1)
   
   grid.polygon(c(7/9,7/9+1/36,7/9+1/36,7/9), c(2/9-1/36,2/9-1/36,2/9,2/9), default.units = 'npc', gp=gpar(fill=lightup(col.lines.gen[i],0.4), col=lightup(col.lines.gen[i],0.4)))
   grid.lines(c(7/9,7/9+1/36), c(2/9-1/72,2/9-1/72), default.units = 'npc', gp=gpar(col=col.lines.gen[i]))
-  grid.text(bquote(~omega),default.units = 'npc',y=2/9-1/72,x=7/9+2/36, gp=gpar(fontsize=unit(7,'pt')))
+  # grid.text(bquote(~omega),default.units = 'npc',y=2/9-1/72,x=7/9+2/36, gp=gpar(fontsize=unit(7,'pt')))
+  grid.text('GI',default.units = 'npc',y=2/9-1/72,x=7/9+2/36, gp=gpar(fontsize=unit(7,'pt')))
   
   if(column!=1) grid.polygon(c(7/9,7/9+1/36,7/9+1/36,7/9), c(2/9-2/36-2/72,2/9-2/36-2/72,2/9-1/36-2/72,2/9-1/36-2/72), default.units = 'npc', gp=gpar(fill=lightup(col.lines.si[i],0.4), col=lightup(col.lines.si[i],0.4)))
   if(column==1) grid.polygon(c(7/9,7/9+1/36,7/9+1/36,7/9), c(2/9-2/36-2/72,2/9-2/36-2/72,2/9-1/36-2/72,2/9-1/36-2/72), default.units = 'npc', gp=gpar(fill=lightup(col.lines.si[i],0.4), col=lightup(col.lines.si[i],0.4)))
   grid.lines(c(7/9,7/9+1/36), c(2/9-2/36-1/72,2/9-2/36-1/72), default.units = 'npc', gp=gpar(col=col.lines.si[i]))
-  grid.text(bquote(~sigma),default.units = 'npc',y=2/9-2/36-1/72,x=7/9+2/36, gp=gpar(fontsize=unit(7,'pt')))
+  # grid.text(bquote(~sigma),default.units = 'npc',y=2/9-2/36-1/72,x=7/9+2/36, gp=gpar(fontsize=unit(7,'pt')))
+  grid.text('SI',default.units = 'npc',y=2/9-2/36-1/72,x=7/9+2/36, gp=gpar(fontsize=unit(7,'pt')))
   
   grid.text(bquote('Incubation of'~.(inc[i])~'days'),default.units = 'npc',x=0.025,y=0.95, gp=gpar(fontsize=unit(8,'pt')), just='left')
   

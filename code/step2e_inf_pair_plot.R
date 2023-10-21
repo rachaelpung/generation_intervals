@@ -104,24 +104,31 @@ paneller=function(row = 1,column=1, type=NULL)
   if(row == 3 & column == 2) grid.text('F',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
   
   
-  # if(column == 1) grid.text(bquote(mu[omega[2]]-mu[omega[1]]),y=unit(-2,'lines'))
-  # if(column == 2) grid.text(bquote(mu[sigma[2]]-mu[sigma[1]]),y=unit(-2,'lines'))
-  if(column == 1) grid.text(bquote('Difference in '~omega~' (day)'),y=unit(-2,'lines'))
-  if(column == 2) grid.text(bquote('Difference in '~sigma~' (day)'),y=unit(-2,'lines'))
+  
+  # if(column == 1) grid.text(bquote('Difference in '~omega~' (day)'),y=unit(-2,'lines'))
+  # if(column == 2) grid.text(bquote('Difference in '~sigma~' (day)'),y=unit(-2,'lines'))
+  if(column == 1) grid.text('Difference in GI (day)',y=unit(-2,'lines'))
+  if(column == 2) grid.text('Difference in SI (day)',y=unit(-2,'lines'))
   grid.text('Power (%)',x=unit(-3,'lines'),rot=90)
   
   
   if(row==1) grid.text('Diff incub period', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==1) grid.text(bquote('& isolate status, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==2) grid.text(bquote('& isolate status, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==1 & column==1) grid.text(bquote('& isolate status, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==1 & column==2) grid.text(bquote('& isolate status, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==1 & column==1) grid.text('& isolate status, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==1 & column==2) grid.text('& isolate status, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   if(row==2) grid.text('Diff incub,inf period', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==1) grid.text(bquote('& prob of inf, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==2) grid.text(bquote('& prob of inf, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==2 & column==1) grid.text(bquote('& prob of inf, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==2 & column==2) grid.text(bquote('& prob of inf, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==2 & column==1) grid.text('& prob of inf, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==2 & column==2) grid.text('& prob of inf, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   if(row==3) grid.text('Diff incub, inf period', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==3 & column==1) grid.text(bquote('& isolate status, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==3 & column==2) grid.text(bquote('& isolate status, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==3 & column==1) grid.text(bquote('& isolate status, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==3 & column==2) grid.text(bquote('& isolate status, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==3 & column==1) grid.text('& isolate status, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==3 & column==2) grid.text('& isolate status, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   # symbols
   if(row==1 & column==1) {
@@ -215,8 +222,10 @@ colourbar.pathogen <- function(x_bottom_left = 1.1, y_bottom_left = 0.4, y_lengt
     
   }
   
-  grid.text(bquote('|'~mu[s[2]]-mu[s[1]]~'|'),x=x_bottom_left+0.2, y=y_bottom_left_start[1]+2.5*y_length, 
-            default.units = 'native', gp = gpar(fontsize = 8))
+  # grid.text(bquote('|'~mu[s[2]]-mu[s[1]]~'|'),x=x_bottom_left+0.2, y=y_bottom_left_start[1]+2.5*y_length, 
+  #           default.units = 'native', gp = gpar(fontsize = 8))
+  grid.text('|Incub difference|',x=x_bottom_left, y=y_bottom_left_start[1]+2.5*y_length, 
+            default.units = 'native', just = 'left', gp = gpar(fontsize = 8))
 
   
 }
@@ -336,19 +345,25 @@ paneller=function(row = 1,column=1, type=NULL)
   if(row == 3 & column == 2) grid.text('F',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
   
   
-  # if(column==1) grid.text(bquote(mu[omega[2]]-mu[omega[1]]),y=unit(-2,'lines'))
-  # if(column==2) grid.text(bquote(mu[sigma[2]]-mu[sigma[1]]),y=unit(-2,'lines'))
-  if(column == 1) grid.text(bquote('Difference in '~omega~' (day)'),y=unit(-2,'lines'))
-  if(column == 2) grid.text(bquote('Difference in '~sigma~' (day)'),y=unit(-2,'lines'))
+ 
+  # if(column == 1) grid.text(bquote('Difference in '~omega~' (day)'),y=unit(-2,'lines'))
+  # if(column == 2) grid.text(bquote('Difference in '~sigma~' (day)'),y=unit(-2,'lines'))
+  if(column == 1) grid.text('Difference in GI (day)',y=unit(-2,'lines'))
+  if(column == 2) grid.text('Difference in SI (day)',y=unit(-2,'lines'))
+  
   grid.text('Power (%)',x=unit(-3,'lines'),rot=90)
   
   if(row==1) grid.text('Daily HH vs', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==1) grid.text(bquote('non-HH contact, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==2) grid.text(bquote('non-HH contact, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==1 & column==1) grid.text(bquote('non-HH contact, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==1 & column==2) grid.text(bquote('non-HH contact, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==1 & column==1) grid.text('non-HH contact, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==1 & column==2) grid.text('non-HH contact, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   if(row==2) grid.text('Daily HH vs', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==1) grid.text(bquote('once wkly HH contact, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==2) grid.text(bquote('once wkly HH contact, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==2 & column==1) grid.text(bquote('once wkly HH contact, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==2 & column==2) grid.text(bquote('once wkly HH contact, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==2 & column==1) grid.text('once wkly HH contact, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==2 & column==2) grid.text('once wkly HH contact, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   # symbols
   if(row==1 & column==1) {
@@ -538,19 +553,23 @@ paneller=function(row = 1,column=1, type=NULL)
   if(row == 2 & column == 2) grid.text('D',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
   
   
-  if(row == 1) grid.text(bquote(mu[omega[1]]-mu[omega[2]]),y=unit(-2,'lines'))
-  if(row == 2) grid.text(bquote(mu[sigma[1]]-mu[sigma[2]]),y=unit(-2,'lines'))
+  if(row == 1) grid.text('Difference in GI (day)',y=unit(-2,'lines'))
+  if(row == 2) grid.text('Difference in SI (day)',y=unit(-2,'lines'))
   
   grid.text('Power (%)',x=unit(-3,'lines'),rot=90)
   
   if(row==1 & column==1) grid.text('Diff incub period & isolate status', x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
-  if(row==1 & column==1) grid.text(bquote('Wild SARS-CoV-2 '~omega), x=0.05, y=0.90, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  # if(row==1 & column==1) grid.text(bquote('Wild SARS-CoV-2 '~omega), x=0.05, y=0.90, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  if(row==1 & column==1) grid.text('Wild SARS-CoV-2, GI', x=0.05, y=0.90, just='left', default.units = 'native', gp = gpar(fontsize = 8))
   
   if(row==1 & column==2) grid.text('Diff incub & isolate status', x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
-  if(row==1 & column==2) grid.text(bquote('Ferretti et al model '~omega), x=0.05, y=0.90, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  # if(row==1 & column==2) grid.text(bquote('Ferretti et al model '~omega), x=0.05, y=0.90, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  if(row==1 & column==2) grid.text('Ferretti et al model, GI', x=0.05, y=0.90, just='left', default.units = 'native', gp = gpar(fontsize = 8))
   
-  if(row==2 & column==1) grid.text(bquote('Wild SARS-CoV-2 '~sigma), x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
-  if(row==2 & column==2) grid.text(bquote('Ferretti et al '~sigma), x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  # if(row==2 & column==1) grid.text(bquote('Wild SARS-CoV-2 '~sigma), x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  # if(row==2 & column==2) grid.text(bquote('Ferretti et al '~sigma), x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  if(row==2 & column==1) grid.text('Wild SARS-CoV-2, SI', x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
+  if(row==2 & column==2) grid.text('Ferretti et al, SI', x=0.05, y=0.95, just='left', default.units = 'native', gp = gpar(fontsize = 8))
   
   
   grid.lines(c(0,1,1,0,0),c(0,0,1,1,0))
@@ -629,7 +648,8 @@ paneller=function(row = 1,column=1)
     
     mean=round(mean(gen.dist[row.index[i], ]), 1)
     sd=round(sd(gen.dist[row.index[i], ]), 1)
-    grid.text(bquote(omega[.(i)] == .(mean) ~ ' (' ~ .(sd) ~')'), x=15, y=0.15-space[i], just='left', default.units = 'native', gp = gpar(fontsize = 8))
+    # grid.text(bquote(omega[.(i)] == .(mean) ~ ' (' ~ .(sd) ~')'), x=15, y=0.15-space[i], just='left', default.units = 'native', gp = gpar(fontsize = 8))
+    grid.text(bquote('GI'[.(i)] == .(mean) ~ ' (' ~ .(sd) ~')'), x=15, y=0.15-space[i], just='left', default.units = 'native', gp = gpar(fontsize = 8))
     
   }
   
@@ -997,7 +1017,7 @@ paneller=function(row = 1,column=1)
   if(row==2 & column == 1) {
     grid.text('B',x=unit(-2,'lines'),y=unit(11,'lines'),gp=gpar(fontsize=unit(12,'pt')))
     grid.text('Serial interval (day)',x=unit(-2.5,'lines'),rot=90)
-    grid.text('p (%)',y=unit(-2,'lines'))
+    grid.text('Infection probability (%)',y=unit(-2,'lines'))
   }
   if(row==2 & column == 2) {
     grid.text('C',x=unit(-2,'lines'),y=unit(11,'lines'),gp=gpar(fontsize=unit(12,'pt')))
@@ -1023,6 +1043,25 @@ paneller=function(row = 1,column=1)
   
   popViewport()
   popViewport()
+  
+}
+
+
+extract_param <- function(type,values,distribution){
+  
+  # DEBUG:
+  # type = "median"; values = c(0.6,0.7); distribution = "lnorm"
+  
+  # Validate inputs
+  #if(type=="median" & length(values)!=3){stop("Need 'values' to be vector length 3")}
+  if(length(values)!=2){stop("Need 'values' to be vector length 2")}
+  
+  # Extract distribution parameters using optimisation
+  param = c(a = 1, b = 1)
+  result2 = optim(param, fit_function, method="L-BFGS-B", val=values, lower=c(0,0), hessian=FALSE) #, control=list(trace=1))
+  
+  # Output parameters
+  result2$par
   
 }
 

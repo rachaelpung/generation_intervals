@@ -1,71 +1,55 @@
 source('code/step0_load_library.R')
 
-load('output/param_pair_epi_dyn/gen.dist.RData')
-load('output/param_pair_epi_dyn/si.dist.RData')
-load('output/param_pair_epi_dyn/param.pair.RData')
+# unadjusted
+load('output/param_pair_epi_unadj/gen.dist.RData')
+load('output/param_pair_epi_unadj/si.dist.RData')
+load('output/param_pair_epi_unadj/param.pair.RData')
 
 param[,set.no:=seq_len(.N)]
 ref=alt=list()
 
+# unadjusted
 # diff incub, ref growing, alt decline
-ref[['a.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & is.na(mean.iso) & is.na(var.iso) & var.incub==5 & mean.incub==4 & growth_rate==log(2)/3.5, set.no]
-alt[['a.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & is.na(mean.iso) & is.na(var.iso) & var.incub==5 & growth_rate==-log(2)/3.5, set.no]
+ref[['a.1']] = param[mean.incub==4, set.no]
+alt[['a.1']] = param[mean.incub==5 & growth_rate=='-0.2', set.no]
 
-ref[['a.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==8 & var.iso==15 & var.incub==5 & mean.incub==4 & growth_rate==log(2)/3.5, set.no]
-alt[['a.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==8 & var.iso==15 & var.incub==5 & growth_rate==-log(2)/3.5, set.no]
+ref[['a.2']] = param[mean.incub==4, set.no]
+alt[['a.2']] = param[mean.incub==5 & growth_rate==0, set.no]
 
-ref[['a.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & growth_rate==log(2)/3.5, set.no]
-alt[['a.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==-log(2)/3.5, set.no]
+ref[['a.3']] = param[mean.incub==4, set.no]
+alt[['a.3']] = param[mean.incub==5 & growth_rate=='0.2', set.no]
 
-# diff incub, ref and alt constant
-ref[['b.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & is.na(mean.iso) & is.na(var.iso) & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['b.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & is.na(mean.iso) & is.na(var.iso) & var.incub==5 & is.na(growth_rate), set.no]
+# adjusted
+# growing ref and declining alt
+ref[['a.1']] = param[nsim==1000 & inf.func.name=='spline.covid.delta' , set.no]
+alt[['a.1']] = param[nsim==1000 & inf.func.name=='spline.covid.wild' & growth_rate=='-0.2', set.no]
 
-ref[['b.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==8 & var.iso==15 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['b.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==8 & var.iso==15 & var.incub==5 & is.na(growth_rate), set.no]
+ref[['a.2']] = param[nsim==100 & inf.func.name=='spline.covid.delta', set.no]
+alt[['a.2']] = param[nsim==100 & inf.func.name=='spline.covid.wild' & growth_rate=='-0.2', set.no]
 
-ref[['b.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['b.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & is.na(growth_rate), set.no]
+ref[['a.3']] = param[nsim==25 & inf.func.name=='spline.covid.delta', set.no]
+alt[['a.3']] = param[nsim==25 & inf.func.name=='spline.covid.wild' & growth_rate=='-0.2', set.no]
 
-# diff incub, ref constant, alt exp growing
-ref[['c.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & is.na(mean.iso) & is.na(var.iso) & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['c.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & is.na(mean.iso) & is.na(var.iso) & var.incub==5 & growth_rate==log(2)/3.5, set.no]
+# constant ref and alt
+ref[['b.1']] = param[nsim==1000 & inf.func.name=='spline.covid.delta', set.no]
+alt[['b.1']] = param[nsim==1000 & inf.func.name=='spline.covid.wild' & growth_rate==0, set.no]
 
-ref[['c.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==8 & var.iso==15 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['c.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==8 & var.iso==15 & var.incub==5 & growth_rate==log(2)/3.5, set.no]
+ref[['b.2']] = param[nsim==100 & inf.func.name=='spline.covid.delta', set.no]
+alt[['b.2']] = param[nsim==100 & inf.func.name=='spline.covid.wild' & growth_rate==0, set.no]
 
-ref[['c.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['c.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==log(2)/3.5, set.no]
+ref[['b.3']] = param[nsim==25 & inf.func.name=='spline.covid.delta', set.no]
+alt[['b.3']] = param[nsim==25 & inf.func.name=='spline.covid.wild' & growth_rate==0, set.no]
 
-# diff incub, peak, duration shedding, ref growing, alt decline
-ref[['d.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & growth_rate==log(2)/3.5, set.no]
-alt[['d.1']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==-log(2)/3.5, set.no]
+# declining ref and growing alt
+ref[['c.1']] = param[nsim==1000 & inf.func.name=='spline.covid.delta', set.no]
+alt[['c.1']] = param[nsim==1000 & inf.func.name=='spline.covid.wild' & growth_rate=='0.2', set.no]
 
-ref[['d.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.002 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & growth_rate==log(2)/3.5, set.no]
-alt[['d.2']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==-log(2)/3.5, set.no]
+ref[['c.2']] = param[nsim==100 & inf.func.name=='spline.covid.delta', set.no]
+alt[['c.2']] = param[nsim==100 & inf.func.name=='spline.covid.wild' & growth_rate=='0.2', set.no]
 
-ref[['d.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.006 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & growth_rate==log(2)/3.5, set.no]
-alt[['d.3']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==-log(2)/3.5, set.no]
+ref[['c.3']] = param[nsim==25 & inf.func.name=='spline.covid.delta', set.no]
+alt[['c.3']] = param[nsim==25 & inf.func.name=='spline.covid.wild' & growth_rate=='0.2', set.no]
 
-# diff incub, peak, duration shedding, ref and alt constant
-ref[['e.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['e.1']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & is.na(growth_rate), set.no]
-
-ref[['e.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.002 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['e.2']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & is.na(growth_rate), set.no]
-
-ref[['e.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.006 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['e.3']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & is.na(growth_rate), set.no]
-
-# diff incub, peak, duration shedding, ref growing, alt constant
-ref[['f.1']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['f.1']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==log(2)/3.5, set.no]
-
-ref[['f.2']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.002 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['f.2']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==log(2)/3.5, set.no]
-
-ref[['f.3']] = param[inf.func.name=='spline.covid.delta' & ct.list.name=='hh' & beta==0.006 & mean.iso==4 & var.iso==5 & var.incub==5 & mean.incub==4 & is.na(growth_rate), set.no]
-alt[['f.3']] = param[inf.func.name=='spline.covid.wild' & ct.list.name=='hh' & beta==0.0005 & mean.iso==4 & var.iso==5 & var.incub==5 & growth_rate==log(2)/3.5, set.no]
 
 row.pair=data.table()
 for(i in 1:length(ref)){
@@ -81,12 +65,12 @@ for(i in 1:length(ref)){
   }
 }
 
+row.pair[param,nsim:=i.nsim, on=c(ref='set.no')]
 
 
 # power calculation
 diff.mean.gen=diff.mean.si=as.numeric()
 pow.gen=pow.si=as.numeric()
-size=c(25, 100) #c(25, 50, 75, 100)
 
 for(r in 1:row.pair[,.N]){
   
@@ -116,41 +100,119 @@ for(r in 1:row.pair[,.N]){
   diff.mean.gen=c(diff.mean.gen, mu.gen.alt-mu.gen.ref)
   diff.mean.si=c(diff.mean.si, mu.si.alt-mu.si.ref)
   
-  for(s in 1:length(size)){
-    
-    pow.gen=c(pow.gen, power.welch.t.test(n=size[s], delta=mu.gen.alt-mu.gen.ref, 
+  pow.gen=c(pow.gen, power.welch.t.test(n=row.pair[r,nsim], delta=mu.gen.alt-mu.gen.ref, 
                                           sd1=sd(gen.ref), sd2=sd(gen.alt), 
                                           sig.level = 0.05, alternative = 'two.sided')$power)
     
-    pow.si=c(pow.si, power.welch.t.test(n=size[s], delta=mu.si.alt-mu.si.ref, 
+  pow.si=c(pow.si, power.welch.t.test(n=row.pair[r,nsim], delta=mu.si.alt-mu.si.ref, 
                                         sd1=sd(si.ref), sd2=sd(si.alt), 
                                         sig.level = 0.05, alternative = 'two.sided')$power)
     
-  }
   
 }
 
 
 # tabulate
-row.pair=row.pair[rep(seq_len(nrow(row.pair)), each=length(size)),]
-row.pair[,sample.size:=rep(size, times=.N/length(size))]
-
 row.pair[param,beta.ref:=i.beta, on=c(ref='set.no')]
 row.pair[param,mean.incub.ref:=i.mean.incub, on=c(ref='set.no')]
-row.pair[param,var.incub.ref:=i.var.incub, on=c(ref='set.no')]
-row.pair[param,mean.iso.ref:=i.mean.iso, on=c(ref='set.no')]
-row.pair[param,var.iso.ref:=i.var.iso, on=c(ref='set.no')]
-row.pair[param,p.trans.overall.ref:=i.p.trans.overall, on=c(ref='set.no')]
+row.pair[param,growth.ref:=i.growth_rate, on=c(ref='set.no')]
 
 row.pair[param,beta.alt:=i.beta, on=c(alt='set.no')]
 row.pair[param,mean.incub.alt:=i.mean.incub, on=c(alt='set.no')]
-row.pair[param,var.incub.alt:=i.var.incub, on=c(alt='set.no')]
-row.pair[param,mean.iso.alt:=i.mean.iso, on=c(alt='set.no')]
-row.pair[param,var.iso.alt:=i.var.iso, on=c(alt='set.no')]
-row.pair[param,p.trans.overall.alt:=i.p.trans.overall, on=c(alt='set.no')]
+row.pair[param,growth.alt:=i.growth_rate, on=c(alt='set.no')]
 
 
-row.pair[,`:=`(diff.mean.gen=rep(diff.mean.gen, each=length(size)),
-               diff.mean.si=rep(diff.mean.si, each=length(size)),
+row.pair[,`:=`(diff.mean.gen=diff.mean.gen,
+               diff.mean.si=diff.mean.si,
                pow.gen=pow.gen,
                pow.si=pow.si)]
+
+
+# adjusted
+load('output/param_pair_epi_adj/mean.gen.RData')
+load('output/param_pair_epi_adj/mean.si.RData')
+load('output/param_pair_epi_adj/param.pair.RData')
+
+
+param[,set.no:=rep(rep(1:100, each=14), times=3)]
+param[,row_no:=1:.N]
+
+row.pair=data.table()
+n_size = c(1000,100,25)
+
+for(n in 1:length(n_size)){
+  for(s in 1:100){
+    for(g in 1:3){
+      ref.i = param[nsim==n_size[n] & set.no==s & inf.func.name=='spline.covid.delta', row_no]
+      
+      if(g==1){
+        alt.i = param[nsim==n_size[n] & set.no==s & inf.func.name=='spline.covid.wild' & growth_rate=='-0.2', row_no]
+        fig.i='a'
+      }
+      if(g==2){
+        alt.i = param[nsim==n_size[n] & set.no==s & inf.func.name=='spline.covid.wild' & growth_rate==0, row_no]
+        fig.i = 'b'
+      }
+      if(g==3){
+        alt.i = param[nsim==n_size[n] & set.no==s & inf.func.name=='spline.covid.wild' & growth_rate=='0.2', row_no]
+        fig.i = 'c'
+      }
+      
+      row.pair=rbind(row.pair, data.table(ref=ref.i, alt=alt.i, fig=fig.i, grp=n, set=s))
+                     
+    }
+  }
+}
+
+setorder(row.pair, fig, grp, set)
+
+
+diff.mean.gen=diff.mean.si=as.numeric()
+
+for(r in 1:row.pair[,.N]){
+  
+  set.seed(123)
+  
+  ref.i = row.pair$ref[r]
+  alt.i = row.pair$alt[r]
+  
+  mu.gen.ref=mean.gen[[ref.i]][1]
+  mu.gen.alt=mean.gen[[alt.i]][1]
+  # sd.gen.ref=mean.gen[[ref.i]][2]
+  # sd.gen.alt=mean.gen[[alt.i]][2]
+  
+  mu.si.ref=mean.si[[ref.i]][1]
+  mu.si.alt=mean.si[[alt.i]][1]
+  # sd.si.ref=mean.si[[ref.i]][2]
+  # sd.si.alt=mean.si[[alt.i]][2]
+  
+  diff.mean.gen=c(diff.mean.gen, mu.gen.alt-mu.gen.ref)
+  diff.mean.si=c(diff.mean.si, mu.si.alt-mu.si.ref)
+  
+}
+
+# tabulate
+row.pair[param,beta.ref:=i.beta, on=c(ref='row_no')]
+row.pair[param,mean.incub.ref:=i.mean.incub, on=c(ref='row_no')]
+row.pair[param,growth.ref:=i.growth_rate, on=c(ref='row_no')]
+
+row.pair[param,beta.alt:=i.beta, on=c(alt='row_no')]
+row.pair[param,mean.incub.alt:=i.mean.incub, on=c(alt='row_no')]
+row.pair[param,growth.alt:=i.growth_rate, on=c(alt='row_no')]
+
+row.pair[,`:=`(diff.mean.gen=diff.mean.gen,
+               diff.mean.si=diff.mean.si)]
+
+# mu.gen=lapply(mean.gen, `[[`, 1)
+# mu.gen=unlist(mu.gen)
+# param[, mu.gen:=mu.gen]
+
+row.pair = row.pair[,.(median(diff.mean.gen), quantile(diff.mean.gen, 0.25), quantile(diff.mean.gen, 0.75),
+                median(diff.mean.si), quantile(diff.mean.si, 0.25), quantile(diff.mean.si, 0.75)), by=.(fig, grp, growth.ref, growth.alt)]
+setnames(row.pair, c('fig', 'grp', 'growth.ref', 'growth.alt',
+                     'med.diff.mean.gen', 'lwr.diff.mean.gen', 'upp.diff.mean.gen',
+                     'med.diff.mean.gen', 'lwr.diff.mean.gen', 'upp.diff.mean.gen'))
+
+row.pair[grp==1, nsim:=1000]
+row.pair[grp==2, nsim:=100]
+row.pair[grp==3, nsim:=25]

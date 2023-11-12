@@ -25,7 +25,7 @@ gi.pair <- function(nsim=10, dt=5/(24*60), ct.pair = NULL,
   num.int = 1/dt
 
   # incubation period 
-  if(is.null(growth_rate) | is.na(growth_rate)){
+  if(is.null(growth_rate) | is.na(growth_rate) | growth_rate==0){
     inc.f = inc.func[[inc.func.name]]
     inc = inc.f(nsim, inc.pars)
   }else{
@@ -36,17 +36,17 @@ gi.pair <- function(nsim=10, dt=5/(24*60), ct.pair = NULL,
     inc.f = dlnorm(t, meanlog = inc.pars[1], sdlog = inc.pars[2])
     inc.f = inc.f/sum(inc.f)
     inc.b = exp(-growth_rate*t)*inc.f/sum(exp(-growth_rate*t)*inc.f)
-    inc.b = sample(t, nsim, replace=TRUE, prob=inc.b)
-    # inc = sample(t, nsim, replace=TRUE, prob=inc.b)
+    # inc.b = sample(t, nsim, replace=TRUE, prob=inc.b)
+    inc = sample(t, nsim, replace=TRUE, prob=inc.b)
     
-    # sensitivity analysis
-    # adjust incubation period
-    inc.b = data.table(table(inc.b))
-    setnames(inc.b, c('t','N'))
-    inc.b[, P:=N/sum(N)]
-    inc.b[, t:=as.numeric(t)]
-    inc.f = exp(growth_rate*inc.b$t)*inc.b$P/sum(exp(growth_rate*inc.b$t)*inc.b$P)
-    inc = sample(inc.b$t, nsim, replace=T, prob = inc.f)
+    # # sensitivity analysis
+    # # adjust incubation period
+    # inc.b = data.table(table(inc.b))
+    # setnames(inc.b, c('t','N'))
+    # inc.b[, P:=N/sum(N)]
+    # inc.b[, t:=as.numeric(t)]
+    # inc.f = exp(growth_rate*inc.b$t)*inc.b$P/sum(exp(growth_rate*inc.b$t)*inc.b$P)
+    # inc = sample(inc.b$t, nsim, replace=T, prob = inc.f)
     
   }
   

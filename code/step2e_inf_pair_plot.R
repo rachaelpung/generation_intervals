@@ -20,6 +20,8 @@ paneller=function(row = 1,column=1, type=NULL)
                                  pow=pow.gen)]
   if(type=='si') row.pair[,`:=`(diff=diff.mean.si,
                                 pow=pow.si)]
+  if(type=='dgi') row.pair[,`:=`(diff=diff.mean.si,
+                                pow=pow.dgi)]
   
   if(row == 1) data = row.pair[fig=='a']
   if(row == 2) data = row.pair[fig=='b']
@@ -63,14 +65,21 @@ paneller=function(row = 1,column=1, type=NULL)
   for(s in 1:length(size)){
     
     data.spline=data[sample.size==size[s]]
-    data.points=data[sample.size==size[s] & diff<=1.99 & diff>=0.05 & pow<=0.99]
+    if(column != 3) data.points=data[sample.size==size[s] & diff<=1.99 & diff>=0.05 & pow<=0.99]
+    if(column == 3) data.points=data[sample.size==size[s] & diff<=1.99 & diff>=0.05] # for aesthetics
     
     for(g in 1:3){
       
       # fit spline
-      fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0,2,0.01))
+      if(row==1 & column==3 & g==3 & s==1) {
+        fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0,0.5,0.01)) # for aesthetics
+      } else if(row==3 & column==3 & g==3 & s==1) {
+        fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0,0.5,0.01)) # for aesthetics
+      } else{
+        fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0,2,0.01))
+      }
       
-      grid.lines(fit$x, fit$y, default.units = 'native', gp=gpar(col=col.lines[g]))
+      if(!(row==2 & column==3 & g==3))grid.lines(fit$x, fit$y, default.units = 'native', gp=gpar(col=col.lines[g]))
       
       # assign colour to points
       pal=gradient_n_pal(colours = col.pts.hue[[g]], values = val)
@@ -95,40 +104,48 @@ paneller=function(row = 1,column=1, type=NULL)
   grid.xaxis(at=seq(0,2,0.5),label=seq(0,2,0.5),gp=gpar(fontsize=unit(7,'pt')))
   grid.yaxis(at=seq(0,1,0.2),label=seq(0,100,20),gp=gpar(fontsize=unit(7,'pt')))
   
-  # labels
+  # fig labels
   if(row == 1 & column == 1) grid.text('A',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
   if(row == 1 & column == 2) grid.text('B',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 2 & column == 1) grid.text('C',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 2 & column == 2) grid.text('D',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 3 & column == 1) grid.text('E',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 3 & column == 2) grid.text('F',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 1 & column == 3) grid.text('C',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 2 & column == 1) grid.text('D',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 2 & column == 2) grid.text('E',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 2 & column == 3) grid.text('F',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 3 & column == 1) grid.text('G',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 3 & column == 2) grid.text('H',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 3 & column == 3) grid.text('I',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
   
-  
+  # top label
+  if(row ==1 & column == 1) grid.text('Theoretical GI',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 2) grid.text('Observed SI',y=unit(15.3,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 2) grid.text('(Lower limit for derived GI)',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 3) grid.text('(Upper limit for derived GI)',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
   
   # if(column == 1) grid.text(bquote('Difference in '~omega~' (day)'),y=unit(-2,'lines'))
   # if(column == 2) grid.text(bquote('Difference in '~sigma~' (day)'),y=unit(-2,'lines'))
   if(column == 1) grid.text('Difference in GI (day)',y=unit(-2,'lines'))
   if(column == 2) grid.text('Difference in SI (day)',y=unit(-2,'lines'))
+  if(column == 3) grid.text('Difference in GI (day)',y=unit(-2,'lines'))
   grid.text('Power (%)',x=unit(-3,'lines'),rot=90)
   
   
   if(row==1) grid.text('Diff incub period', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==1 & column==1) grid.text(bquote('& isolate status, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==1 & column==2) grid.text(bquote('& isolate status, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==1) grid.text('& isolate status, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==2) grid.text('& isolate status, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==1) grid.text('& isolate status', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==1 & column==2) grid.text('& isolate status', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   if(row==2) grid.text('Diff incub,inf period', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==2 & column==1) grid.text(bquote('& prob of inf, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==2 & column==2) grid.text(bquote('& prob of inf, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==1) grid.text('& prob of inf, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==2) grid.text('& prob of inf, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==2) grid.text('& prob of inf', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==2 & column==2) grid.text('& prob of inf', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   if(row==3) grid.text('Diff incub, inf period', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==3 & column==1) grid.text(bquote('& isolate status, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==3 & column==2) grid.text(bquote('& isolate status, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==3 & column==1) grid.text('& isolate status, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==3 & column==2) grid.text('& isolate status, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==3) grid.text('& isolate status', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==3 & column==2) grid.text('& isolate status', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   # symbols
   if(row==1 & column==1) {
@@ -230,16 +247,21 @@ colourbar.pathogen <- function(x_bottom_left = 1.1, y_bottom_left = 0.4, y_lengt
   
 }
 
-png('figure/power_pathogen.png',height=24,width=16,units='cm',res=300,pointsize=10)
+png('figure/power_pathogen.png',height=24,width=24,units='cm',res=300,pointsize=10)
 pushViewport(plotViewport(c(2,2,1,1)))
-pushViewport(viewport(layout=grid.layout(nrow=3,ncol=2)))
+pushViewport(viewport(layout=grid.layout(nrow=3,ncol=3)))
 
 paneller(1,1,type='gen')
 paneller(1,2,type='si')
+paneller(1,3,type='dgi')
+
 paneller(2,1,type='gen')
 paneller(2,2,type='si')
+paneller(2,3,type='dgi')
+
 paneller(3,1,type='gen')
 paneller(3,2,type='si')
+paneller(3,3,type='dgi')
 
 popViewport()
 popViewport()
@@ -261,6 +283,8 @@ paneller=function(row = 1,column=1, type=NULL)
                                  pow=pow.gen)]
   if(type=='si') row.pair[,`:=`(diff=diff.mean.si,
                                 pow=pow.si)]
+  if(type=='dgi') row.pair[,`:=`(diff=diff.mean.si,
+                                pow=pow.dgi)]
   
   if(row == 1) data = row.pair[fig=='d']
   if(row == 2) data = row.pair[fig=='e']
@@ -302,8 +326,10 @@ paneller=function(row = 1,column=1, type=NULL)
       # fit spline
       if(row==2 & g==1 & type=='gen'){
         fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0.8,2,0.01))
-      } else if(row==2 & g==1 & type=='si'){
+      } else if(row==2 & g==1 & type%in%c('si','dgi')){
         fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0.9,2,0.01))
+      } else if(row==1 & g==3 & s==1 & type=='dgi'){
+        fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0,0.4,0.01))
       } else{
         fit=predict(smooth.spline(data.spline[grp==g]$diff, data.spline[grp==g]$pow), seq(0,2,0.01))
       }
@@ -335,14 +361,22 @@ paneller=function(row = 1,column=1, type=NULL)
   grid.xaxis(at=seq(0,2,0.5),label=seq(0,2,0.5),gp=gpar(fontsize=unit(7,'pt')))
   grid.yaxis(at=seq(0,1,0.2),label=seq(0,100,20),gp=gpar(fontsize=unit(7,'pt')))
   
+  # top label
+  if(row ==1 & column == 1) grid.text('Theoretical GI',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 2) grid.text('Observed SI',y=unit(14.7,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 2) grid.text('(Lower limit of derived GI)',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 3) grid.text('(Upper limit of derived GI)',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
   
-  # labels
+  # fig labels
   if(row == 1 & column == 1) grid.text('A',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
   if(row == 1 & column == 2) grid.text('B',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 2 & column == 1) grid.text('C',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 2 & column == 2) grid.text('D',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 3 & column == 1) grid.text('E',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
-  if(row == 3 & column == 2) grid.text('F',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 1 & column == 3) grid.text('C',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 2 & column == 1) grid.text('D',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 2 & column == 2) grid.text('E',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 2 & column == 3) grid.text('F',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 3 & column == 1) grid.text('G',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 3 & column == 2) grid.text('H',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
+  if(row == 3 & column == 3) grid.text('I',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))
   
   
  
@@ -350,20 +384,21 @@ paneller=function(row = 1,column=1, type=NULL)
   # if(column == 2) grid.text(bquote('Difference in '~sigma~' (day)'),y=unit(-2,'lines'))
   if(column == 1) grid.text('Difference in GI (day)',y=unit(-2,'lines'))
   if(column == 2) grid.text('Difference in SI (day)',y=unit(-2,'lines'))
+  if(column == 3) grid.text('Difference in GI (day)',y=unit(-2,'lines'))
   
   grid.text('Power (%)',x=unit(-3,'lines'),rot=90)
   
   if(row==1) grid.text('Daily HH vs', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==1 & column==1) grid.text(bquote('non-HH contact, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==1 & column==2) grid.text(bquote('non-HH contact, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==1) grid.text('non-HH contact, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==1 & column==2) grid.text('non-HH contact, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==1) grid.text('non-HH contact', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==1 & column==2) grid.text('non-HH contact', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   if(row==2) grid.text('Daily HH vs', x=0.05, y=0.95, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==2 & column==1) grid.text(bquote('once wkly HH contact, '~omega), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   # if(row==2 & column==2) grid.text(bquote('once wkly HH contact, '~sigma), x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==1) grid.text('once wkly HH contact, GI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
-  if(row==2 & column==2) grid.text('once wkly HH contact, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  if(row==2) grid.text('once wkly HH contact', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
+  # if(row==2 & column==2) grid.text('once wkly HH contact, SI', x=0.05, y=0.90, default.units = 'native', just='left', gp = gpar(fontsize = 8))
   
   # symbols
   if(row==1 & column==1) {
@@ -455,14 +490,17 @@ colourbar.contact <- function(x_bottom_left = 1.1, y_bottom_left = 0.4, y_length
   
 }
 
-png('figure/power_contact.png',height=16,width=16,units='cm',res=300,pointsize=10)
+png('figure/power_contact.png',height=16,width=24,units='cm',res=300,pointsize=10)
 pushViewport(plotViewport(c(2,2,1,1)))
-pushViewport(viewport(layout=grid.layout(nrow=2,ncol=2)))
+pushViewport(viewport(layout=grid.layout(nrow=2,ncol=3)))
 
 paneller(1,1,type='gen')
 paneller(1,2,type='si')
+paneller(1,3,type='dgi')
+
 paneller(2,1,type='gen')
 paneller(2,2,type='si')
+paneller(2,3,type='dgi')
 
 
 popViewport()

@@ -3,6 +3,7 @@ source('code/step0_load_library.R')
 load('output/param_pair/gen.dist.RData')
 load('output/param_pair/si.dist.RData')
 load('output/param_pair/param.pair.RData')
+load('output/param_pair/inc.dist.RData')
 
 # load('output/param_pair/gen.dist_sensitivity_analysis_peak_inf.RData')
 # load('output/param_pair/si.dist_sensitivity_analysis_peak_inf.RData')
@@ -109,7 +110,7 @@ for(i in 1:length(ref)){
 
 # power calculation
 diff.mean.gen=diff.mean.si=as.numeric()
-pow.gen=pow.si=as.numeric()
+pow.gen=pow.si=pow.dgi=as.numeric()
 size=c(25, 100) #c(25, 50, 75, 100)
 
 for(r in 1:row.pair[,.N]){
@@ -127,6 +128,12 @@ for(r in 1:row.pair[,.N]){
   si.ref=si.ref[!is.na(si.ref)]
   si.alt=si.alt[!is.na(si.alt)]
   
+  inc.ref=inc.dist[row.pair[r,ref],]
+  inc.alt=inc.dist[row.pair[r,alt],]
+  
+  inc.ref=inc.ref[!is.na(inc.ref)]
+  inc.alt=inc.alt[!is.na(inc.alt)]
+  
   mu.gen.ref=mean(gen.ref)
   mu.gen.alt=mean(gen.alt)
   sd.gen.ref=sd(gen.ref)
@@ -136,19 +143,36 @@ for(r in 1:row.pair[,.N]){
   mu.si.alt=mean(si.alt)
   sd.si.ref=sd(si.ref)
   sd.si.alt=sd(si.alt)
-
+  
   diff.mean.gen=c(diff.mean.gen, mu.gen.alt-mu.gen.ref)
   diff.mean.si=c(diff.mean.si, mu.si.alt-mu.si.ref)
   
+  # sd of derived GI from observed SI
+  var.derived.gen.ref=var(si.ref)-2*var(inc.ref)
+  var.derived.gen.alt=var(si.alt)-2*var(inc.alt)
+  
+  if(var.derived.gen.ref<0) var.derived.gen.ref=0
+  if(var.derived.gen.alt<0) var.derived.gen.alt=0
+  
+  sd.derived.gen.ref=sqrt(var.derived.gen.ref)
+  sd.derived.gen.alt=sqrt(var.derived.gen.alt)
+  
   for(s in 1:length(size)){
     
+    # power for theoretical GI
     pow.gen=c(pow.gen, power.welch.t.test(n=size[s], delta=mu.gen.alt-mu.gen.ref, 
-                                          sd1=sd(gen.ref), sd2=sd(gen.alt), 
+                                          sd1=sd.gen.ref, sd2=sd.gen.alt, 
                                           sig.level = 0.05, alternative = 'two.sided')$power)
     
+    # power for observed SI
     pow.si=c(pow.si, power.welch.t.test(n=size[s], delta=mu.si.alt-mu.si.ref, 
-                                          sd1=sd(si.ref), sd2=sd(si.alt), 
+                                          sd1=sd.si.ref, sd2=sd.si.alt, 
                                           sig.level = 0.05, alternative = 'two.sided')$power)
+    
+    # power for derived GI
+    pow.dgi=c(pow.dgi, power.welch.t.test(n=size[s], delta=mu.si.alt-mu.si.ref, 
+                                        sd1=sd.derived.gen.ref, sd2=sd.derived.gen.alt, 
+                                        sig.level = 0.05, alternative = 'two.sided')$power)
     
   }
   
@@ -177,4 +201,5 @@ row.pair[param,p.trans.overall.alt:=i.p.trans.overall, on=c(alt='set.no')]
 row.pair[,`:=`(diff.mean.gen=rep(diff.mean.gen, each=length(size)),
                diff.mean.si=rep(diff.mean.si, each=length(size)),
                pow.gen=pow.gen,
-               pow.si=pow.si)]
+               pow.si=pow.si,
+               pow.dgi=pow.dgi)]

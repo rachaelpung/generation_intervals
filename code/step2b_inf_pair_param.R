@@ -313,42 +313,46 @@ param.pair.epi.dyn.unadj<-function(){
 
 # parameter sensitivity analysis epidemic dynamics
 param.pair.epi.dyn.adj<-function(){
-
-  # param = list()
-  # max.inf.day=30
-  # 
-  # #sars-cov-2 delta, varying incub
-  # param[[1]] = data.table(nsim=c(1000,100,25), mean.incub=4, var.incub=5, inc.func.name='lnorm',
-  #                         max.inf.day, beta=0.0005, inf.func.name='spline.covid.delta',
-  #                         iso.func.name='weibull', ct.list.name='hh', mean.iso=4, var.iso=5)
-  # 
-  # param[[1]] = param[[1]][rep(seq_len(nrow(param[[1]])), times=3)]
-  # param[[1]][, growth_rate:=rep(c(-log(2)/3.5, NA, log(2)/3.5), each=.N/3)]
-  # 
-  # #sars-cov-2 wild, varying incub
-  # param[[2]] = data.table(mean.incub=seq(0.05,10,0.05), var.incub=5, inc.func.name='lnorm',
-  #                         max.inf.day, beta=0.0005, inf.func.name='spline.covid.wild',
-  #                         iso.func.name='weibull', ct.list.name='hh', mean.iso=4, var.iso=5)
-  # param[[2]] = param[[2]][rep(seq_len(nrow(param[[2]])), times=3)]
-  # param[[2]][, nsim:=rep(c(1000,100,25), each=.N/3)]
-  # 
-  # param[[2]] = param[[2]][rep(seq_len(nrow(param[[2]])), times=3)]
-  # param[[2]][, growth_rate:=rep(c(-log(2)/3.5, NA, log(2)/3.5), each=.N/3)]
-  # 
-  # 
-  # param=rbindlist(param, use.names = T, fill = T)
-  # 
-  # param[,inc.pars.1:=param.convert(inc.func.name, mean.incub, var.incub)[1], by = seq_len(nrow(param))]
-  # param[,inc.pars.2:=param.convert(inc.func.name, mean.incub, var.incub)[2], by = seq_len(nrow(param))]
-  # param[,iso.pars.1:=param.convert(iso.func.name, mean.iso, var.iso)[1], by = seq_len(nrow(param))]
-  # param[,iso.pars.2:=param.convert(iso.func.name, mean.iso, var.iso)[2], by = seq_len(nrow(param))]
-  # 
-  # param[is.na(mean.iso) & is.na(var.iso), iso.func.name:='none']
-  # param=param[(!is.na(mean.iso) & !is.na(var.iso))| (is.na(mean.iso) & is.na(var.iso))]
-  # param=unique(param)
   
   param = param.pair.epi.dyn.unadj()
   param = param[rep(seq_len(nrow(param)), times=300)]
   param[, nsim:=rep(c(1000,100,25), each=.N/3)]
 
 }
+
+
+# parameter sensitivity analysis epidemic dynamics
+param.pair.epi.dyn.pow<-function(){
+  
+  param = list()
+  max.inf.day=30
+
+  #sars-cov-2 delta, varying incub
+  param[[1]] = data.table(nsim=1000, mean.incub=4, var.incub=5, inc.func.name='lnorm',
+                          max.inf.day, beta=0.0005, inf.func.name='spline.covid.delta',
+                          iso.func.name='weibull', ct.list.name='hh', mean.iso=4, var.iso=5,
+                          growth_rate=c(0.2,0,0))
+ 
+  #sars-cov-2 wild, varying incub
+  param[[2]] = data.table(nsim=1000, mean.incub=seq(0.05,10,0.05), var.incub=5, inc.func.name='lnorm',
+                          max.inf.day, beta=0.0005, inf.func.name='spline.covid.wild',
+                          iso.func.name='weibull', ct.list.name='hh', mean.iso=4, var.iso=5)
+  
+  param[[2]] = param[[2]][rep(seq_len(nrow(param[[2]])), times=3)]
+  param[[2]][, growth_rate:=rep(c(-0.2,0,0.2), each=.N/3)]
+  
+ 
+  param=rbindlist(param, use.names = T, fill = T)
+
+  param[,inc.pars.1:=param.convert(inc.func.name, mean.incub, var.incub)[1], by = seq_len(nrow(param))]
+  param[,inc.pars.2:=param.convert(inc.func.name, mean.incub, var.incub)[2], by = seq_len(nrow(param))]
+  param[,iso.pars.1:=param.convert(iso.func.name, mean.iso, var.iso)[1], by = seq_len(nrow(param))]
+  param[,iso.pars.2:=param.convert(iso.func.name, mean.iso, var.iso)[2], by = seq_len(nrow(param))]
+
+  param[is.na(mean.iso) & is.na(var.iso), iso.func.name:='none']
+  param=param[(!is.na(mean.iso) & !is.na(var.iso))| (is.na(mean.iso) & is.na(var.iso))]
+  param=unique(param)
+  
+   
+}
+

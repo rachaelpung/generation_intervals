@@ -118,8 +118,8 @@ paneller=function(row = 1,column=1, type=NULL)
   # top label
   if(row ==1 & column == 1) grid.text('Theoretical GI',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
   if(row ==1 & column == 2) grid.text('Observed SI',y=unit(15.3,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
-  if(row ==1 & column == 2) grid.text('(Lower limit for derived GI)',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
-  if(row ==1 & column == 3) grid.text('(Upper limit for derived GI)',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 2) grid.text('(Lower limit for inferred GI)',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 3) grid.text('(Upper limit for inferred GI)',y=unit(14.5,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
   
   # if(column == 1) grid.text(bquote('Difference in '~omega~' (day)'),y=unit(-2,'lines'))
   # if(column == 2) grid.text(bquote('Difference in '~sigma~' (day)'),y=unit(-2,'lines'))
@@ -364,8 +364,8 @@ paneller=function(row = 1,column=1, type=NULL)
   # top label
   if(row ==1 & column == 1) grid.text('Theoretical GI',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
   if(row ==1 & column == 2) grid.text('Observed SI',y=unit(14.7,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
-  if(row ==1 & column == 2) grid.text('(Lower limit of derived GI)',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
-  if(row ==1 & column == 3) grid.text('(Upper limit of derived GI)',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 2) grid.text('(Lower limit of inferred GI)',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
+  if(row ==1 & column == 3) grid.text('(Upper limit of inferred GI)',y=unit(14,'lines'),gp = gpar(fontsize = 10,fontface='bold'))
   
   # fig labels
   if(row == 1 & column == 1) grid.text('A',x=unit(-2.5,'lines'),y=unit(11.5,'lines'),gp=gpar(fontsize=unit(12,'pt')))

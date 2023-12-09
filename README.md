@@ -4,7 +4,7 @@ This repository contains code and data to simulate pairwise and cluster-level tr
 
 ## Quick start guide
 ### Data for time varying contact pattern
-Original high resolution contact data from a [community in the UK] (https://doi.org/10.1101/479154) can be found in:
+Original high resolution contact data from a [community in the UK](https://doi.org/10.1101/479154) can be found in:
 
 > data/raw/haslemere_edge.csv<br/>
 > data/raw/haslemere_time.csv
